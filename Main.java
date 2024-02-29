@@ -18,6 +18,7 @@ public class Main {
     
         kumpulanATK.display();
         kumpulanBag.display();
+    
         
     }
 }
