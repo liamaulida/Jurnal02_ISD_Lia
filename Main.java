@@ -1,24 +1,105 @@
+import java.util.LinkedList;
+import java.util.ListIterator;
+import java.util.Scanner;
+
 public class Main {
+    private static LinkedList<Tugas> daftarTugas = new LinkedList<>();
+
     public static void main(String[] args) {
-        
-        GenArrayList<ATK> kumpulanATK = new GenArrayList<> (5);
-        GenArrayList<Bag> kumpulanBag = new GenArrayList<> (5);
+        Scanner input = new Scanner(System.in);
 
-        kumpulanATK.addData(new ATK("A005", "Pensil", "Joyko", 20));
-        kumpulanATK.addData(new ATK("A008", "Pulpen", "Sahara", 30));
-        kumpulanATK.addData(new ATK("A002", "Spidol", "Faber Castell", 10));
-        kumpulanATK.addData(new ATK("B003", "Buku Tulis", "Sidu", 50));
-        kumpulanATK.addData(new ATK("B007", "Kertas HVS", "Sidu", 80));
+        while (true) {
+            System.out.println("\nMenu:");
+            System.out.println("1. Input Tugas");
+            System.out.println("2. Delete Tugas");
+            System.out.println("3. Lihat List Tugas");
+            System.out.println("4. Keluar");
+            System.out.print("Pilih menu: ");
+            int menu = input.nextInt();
+            input.nextLine(); // Consume newline
 
-        kumpulanBag.addData(new Bag("C002", "Tempat Pensil", "Elsa", 30));
-        kumpulanBag.addData(new Bag("C007", "Tas", "Tas Polo", 20));
-        kumpulanBag.addData(new Bag("C005", "Tipe X", "Joyko", 10));
-        kumpulanBag.addData(new Bag("C004", "Kacamata", "Kacamata besi", 10));
-        kumpulanBag.addData(new Bag("C008", "Mouse", "Mouse Logitech", 60));
-    
-        kumpulanATK.display();
-        kumpulanBag.display();
-    
-        
+            switch (menu) {
+                case 1:
+                    masukkanTugas(input);
+                    break;
+                case 2:
+                    hapusTugas(input);
+                    break;
+                case 3:
+                    lihatListTugas(input);
+                    break;
+                case 4:
+                    input.close();
+                    return;
+                default:
+                    System.out.println("Menu tidak valid");
+            }
+        }
+    }
+
+    private static void masukkanTugas(Scanner input) {
+        System.out.println("\nInput Data Tugas");
+        System.out.print("Mata Kuliah: ");
+        String mataKuliah = input.nextLine();
+        System.out.print("Tugas: ");
+        String namaTugas = input.nextLine();
+        System.out.print("Deadline: ");
+        String deadline = input.nextLine();
+
+        Tugas tugasBaru = new Tugas(mataKuliah, namaTugas, deadline);
+        daftarTugas.addFirst(tugasBaru);
+    }
+
+    private static void hapusTugas(Scanner input) {
+        System.out.println("\nDelete Data Tugas");
+        System.out.println("1. Berdasarkan Mata Kuliah");
+        System.out.println("2. Berdasarkan Nama Tugas");
+        System.out.println("3. Data Terakhir");
+        System.out.print("Pilih kriteria penghapusan: ");
+        int kriteria = input.nextInt();
+        input.nextLine(); // Consume newline
+
+        switch (kriteria) {
+            case 1:
+                System.out.print("Masukkan Mata Kuliah: ");
+                String mataKuliah = input.nextLine();
+                daftarTugas.removeIf(tugas -> tugas.mataKuliah.equals(mataKuliah));
+                break;
+            case 2:
+                System.out.print("Masukkan Nama Tugas: ");
+                String namaTugas = input.nextLine();
+                daftarTugas.removeIf(tugas -> tugas.namaTugas.equals(namaTugas));
+                break;
+            case 3:
+                daftarTugas.removeLast();
+                break;
+            default:
+                System.out.println("Kriteria penghapusan tidak valid");
+        }
+    }
+
+    private static void lihatListTugas(Scanner input) {
+        System.out.println("\nLihat List Tugas");
+        System.out.println("1. Print Depan");
+        System.out.println("2. Print Belakang");
+        System.out.print("Pilih cara pencetakan: ");
+        int pilihan = input.nextInt();
+        input.nextLine(); // Consume newline
+
+        if (pilihan == 1) {
+            ListIterator<Tugas> iterator = daftarTugas.listIterator();
+            while (iterator.hasNext()) {
+                Tugas tugas = iterator.next();
+                System.out.println("Mata Kuliah = " + tugas.mataKuliah + ", Tugas = " + tugas.namaTugas + ", Deadline = " + tugas.tanggalDeadline);
+            }
+        } else if (pilihan == 2) {
+            ListIterator<Tugas> iterator = daftarTugas.listIterator(daftarTugas.size());
+            while (iterator.hasPrevious()) {
+                Tugas tugas = iterator.previous();
+                System.out.println("Mata Kuliah = " + tugas.mataKuliah + ", Tugas = " + tugas.namaTugas + ", Deadline = " + tugas.tanggalDeadline);
+            }
+        } else {
+            System.out.println("Pilihan tidak valid");
+        }
     }
 }
